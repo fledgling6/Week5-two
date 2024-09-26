@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profiles</title>
+</head>
+
+<body>
+    <div id="profiles"></div>
+    <script>
+        fetch('userProfiles.json')
+            .then(response => {
+                if (!response.ok) throw new Error('Fetch error: ' + response.status);
+                return response.json();
+            })
+            .then(json => {
+                const profilesDiv = document.getElementById('profiles');
+                json.userProfiles.forEach(user => {
+                    const userDiv = document.createElement('div');
+                    userDiv.innerHTML = `
+                        <h2>${user.firstName} ${user.lastName}</h2>
+                        <p>Email: ${user.email}</p>
+                        <p>Date of Birth: ${user.dateOfBirth}</p>
+                        <p>Address: ${user.address.street}, ${user.address.city}, ${user.address.state}, ${user.address.zipCode}</p>
+                        <p>Theme: ${user.userPreferences.theme}</p>
+                        <p>Language: ${user.userPreferences.language}</p>
+                        <p>Notifications: ${user.userPreferences.notifications}</p>
+                        <p>Subscribed: ${user.userPreferences.subscription}</p>
+                        <hr>
+                    `;
+                    profilesDiv.appendChild(userDiv);
+                });
+            })
+            .catch(err => console.error('Fetch error: ' + err.message));
+    </script>
+</body>
+
+</html>
